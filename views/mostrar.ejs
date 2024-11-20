@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/mostrar.css">
+</head>
+
+<body>
+
+    <div class="barra-lateral">
+        <div class="nombre-pagina">
+            <ion-icon id="cloud" name="cloud-outline"></ion-icon>
+            <span>chocoflow</span>
+        </div>
+
+        <div class="boton-crear">
+            <button class="boton">
+                <ion-icon name="add-outline"></ion-icon>
+                <a href="formulario"><span>Añadir producto</span></a>
+            </button>
+        </div>
+
+        <div class="navegacion-side">
+            <nav class="navegacion">
+                <ul>
+                    <li>
+                        <a href="formulario">
+                            <ion-icon name="home-outline"></ion-icon>
+                            <span>Inicio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mostrar">
+                            <ion-icon name="file-tray-stacked-outline"></ion-icon>
+                            <span>Productos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="mostrar">
+                            <ion-icon name="file-tray-stacked-outline"></ion-icon>
+                            <span>Productos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/evaCua/formulario/formulario.html">
+                            <ion-icon name="settings-outline"></ion-icon>
+                            <span>Contacto
+                            </span>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+        </div>
+
+
+        <div class="linea"></div>
+
+        <div id="modo-oscuro" class="modo-oscuro">
+            <div class="info">
+                <ion-icon name="moon-outline"></ion-icon>
+                <span>Modo oscuro</span>
+            </div>
+            <div class="switch">
+                <div class="base">
+                    <div class="circulo">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="main">
+        <div class="topbar">
+            <div class="menu-bton">
+                <ion-icon id="menu" name="menu-outline"></ion-icon>
+            </div>
+
+        </div>
+
+        <div class="stadist">
+            <% usuarios.forEach(usuario=> { %>
+                <div class="card">
+                    <div class="img-pro">
+                        <img src="/imagen/producto1.png" alt="">
+                    </div>
+                    <div class="info-pro">
+                        <div class="titulo-pro">
+                            <h2>
+                                <%= usuario.producto %>
+                            </h2>
+                            <div class="card-linea"></div>
+                        </div>
+                        <div class="datos-pro">
+                            <div class="stock">
+                                <h3>STOCK</h3>
+                                <p>
+                                    <%= usuario.precio %>
+                                </p>
+                            </div>
+                            <div class="precio">
+                                <h3>PRECIO</h3>
+                                <p>
+                                    <%= usuario.precio %>
+                                </p>
+                            </div>
+                            <div class="categoria">
+                                <h3>MARCA</h3>
+                                <p>
+                                    <%= usuario.marca %>
+                                </p>
+                            </div>
+                            <div class="categoria">
+                                <h3>CATEGORIA</h3>
+                                <p>Bebidas</p>
+                            </div>
+                        </div>
+                        <button>agregar</button>
+                    </div>
+                </div>
+                <% }) %>
+
+        </div>
+    </div>
+
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="../js/script.js"></script>
+</body>
+
+</html>

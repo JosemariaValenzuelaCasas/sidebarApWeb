@@ -1,0 +1,95 @@
+.formulario{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.topbar{
+    position: relative;
+    justify-content: center;
+}
+
+.topbar .menu-bton{
+    position: absolute;
+    left: 0;
+}
+.topbar .calendar{
+    display: flex;
+    justify-content: flex-start;
+}
+form {
+    margin-top: 20px;
+    padding: 25px 55px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    text-align: center;
+    width: 340px;
+    background-color: var(--color-barra-lateral);
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+h2 {
+    color: #283629;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+input,
+textarea {
+    padding: 17px 25px;
+    border-radius: 25px;
+    margin-bottom: 20px;
+    background-color: #fff7ed;
+    border: 2px solid #faf4f0;
+    color: #283629;
+    outline: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #cac0b5;
+
+}
+
+
+
+.btn {
+    font-size: 16px;
+    color: #FFFFFF;
+    border: 0;
+    border-radius: 25px;
+    background-color: #d9684c;
+    box-shadow: 0 0 20px rgba(254, 80, 0, 0.4);
+    cursor: pointer;
+}
+
+.btn::hover {
+    background-color: #e09f4b;
+}
+
+.textito{
+    font-size: 40px;
+}
+
+@media(max-width:991px) {
+    body {
+        padding: 30px;
+    }
+
+    form {
+        padding: 50px 30px;
+        width: 100%;
+    }
+
+    input {
+        padding: 15px;
+
+    }
+
+}

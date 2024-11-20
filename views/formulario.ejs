@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>sidebar</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/mostrar.css">
+</head>
+
+<body>
+  <div class="barra-lateral">
+    <div class="nombre-pagina">
+      <ion-icon id="cloud" name="cloud-outline"></ion-icon>
+      <span>chocoflow</span>
+    </div>
+
+    <div class="boton-crear">
+      <button class="boton">
+        <ion-icon name="add-outline"></ion-icon>
+        <a href="formulario"><span>Añadir producto</span></a>
+      </button>
+    </div>
+
+    <div class="navegacion-side">
+      <nav class="navegacion">
+        <ul>
+          <li>
+            <a href="formulario">
+              <ion-icon name="home-outline"></ion-icon>
+              <span>Inicio</span>
+            </a>
+          </li>
+          <li>
+            <a href="mostrar">
+              <ion-icon name="file-tray-stacked-outline"></ion-icon>
+              <span>Productos</span>
+            </a>
+          </li>
+          <li>
+            <a href="mostrar">
+              <ion-icon name="file-tray-stacked-outline"></ion-icon>
+              <span>Productos</span>
+            </a>
+          </li>
+          <li>
+            <a href="/evaCua/formulario/formulario.html">
+              <ion-icon name="settings-outline"></ion-icon>
+              <span>Contacto
+              </span>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+    </div>
+
+
+    <div class="linea"></div>
+
+    <div id="modo-oscuro" class="modo-oscuro">
+      <div class="info">
+        <ion-icon name="moon-outline"></ion-icon>
+        <span>Modo oscuro</span>
+      </div>
+      <div class="switch">
+        <div class="base">
+          <div class="circulo">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="menu-bton">
+        <ion-icon id="menu" name="menu-outline"></ion-icon>
+      </div>
+      <div class="calendar">
+        <div class="day-title" id="dayTitle"></div>
+        <div class="date" id="date"></div>
+      </div>
+    </div>
+
+    <div class="formulario">
+      <form action="/validar" method="post" id="myForm">
+        <h2>Producto</h2>
+  
+        <div class="input-group">
+          <label for="name">Nombre</label>
+          <input type="text" name="name" id="name" placeholder="Nombre del producto">
+  
+          <label for="phone">Marca</label>
+          <input type="tel" name="phone" id="phone" placeholder="Marca del procuto">
+  
+          <label for="email">Precio</label>
+          <input type="text" name="email" id="email" placeholder="Precio del producto">
+  
+          <label for="message">Stock</label>
+          <input name="message" id="message" placeholder="Stock">
+  
+          <input class="btn" type="submit" value="Enviar">
+  
+          <script src="#"></script>
+        </div>
+  
+      </form>
+    </div>
+  </div>
+
+
+  <script src="./js/calendarioDB.js"></script>
+  <a href="./mostrar">mostrar</a>
+
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script src="../js/script.js"></script>
+</body>
+
+</html>
