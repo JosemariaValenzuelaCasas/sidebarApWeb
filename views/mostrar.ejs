@@ -87,7 +87,7 @@
             <% usuarios.forEach(usuario=> { %>
                 <div class="card">
                     <div class="img-pro">
-                        <img src="/imagen/producto1.png" alt="">
+                        <img src="/uploads/<%= usuario.imagen %>" alt="Imagen del producto">
                     </div>
                     <div class="info-pro">
                         <div class="titulo-pro">
@@ -100,7 +100,7 @@
                             <div class="stock">
                                 <h3>STOCK</h3>
                                 <p>
-                                    <%= usuario.precio %>
+                                    <%= usuario.stock %>
                                 </p>
                             </div>
                             <div class="precio">
@@ -109,7 +109,7 @@
                                     <%= usuario.precio %>
                                 </p>
                             </div>
-                            <div class="categoria">
+                            <div class="marca">
                                 <h3>MARCA</h3>
                                 <p>
                                     <%= usuario.marca %>
@@ -120,7 +120,13 @@
                                 <p>Bebidas</p>
                             </div>
                         </div>
-                        <button>agregar</button>
+                        <form action="/actualizar-stock" method="POST">
+                            <input type="hidden" name="id" value="<%= usuario.id %>">
+                            <input type="hidden" name="stock_actual" value="<%= usuario.stock %>">
+                            <button type="submit">
+                                <ion-icon name="settings-outline"></ion-icon>
+                            </button>
+                        </form>
                     </div>
                 </div>
                 <% }) %>
