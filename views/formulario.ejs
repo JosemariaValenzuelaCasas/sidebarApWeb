@@ -87,7 +87,7 @@
     </div>
 
     <div class="formulario">
-      <form action="/validar" method="post" id="myForm">
+      <form method="post" id="myForm" enctype="multipart/form-data">
         <h2>Producto</h2>
   
         <div class="input-group">
@@ -102,13 +102,15 @@
   
           <label for="message">Stock</label>
           <input name="message" id="message" placeholder="Stock">
-  
+          <label for="image">Inserta imagen</label>
+          <input type="file" id="image" name="image" accept="image/*" required />
           <input class="btn" type="submit" value="Enviar">
-  
+          
           <script src="#"></script>
         </div>
   
       </form>
+      <div id="response-message"></div>
     </div>
   </div>
 
@@ -119,6 +121,7 @@
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <script src="../js/script.js"></script>
+  <script src="../js/formulario.js"></script>
 </body>
 
 </html>
