@@ -63,21 +63,31 @@ router.post("/validar", upload.single("image"), function (req, res) {
     });
 });
 
-router.post('/actualizar-stock', (req, res) => {
-    const id = req.body.id;
-    const stockActual = parseInt(req.body.stock_actual, 10);
-    const nuevoStock = stockActual + 1; // Incrementa el stock en 1
-  
-    const query = 'UPDATE producto SET stock = ? WHERE id = ?';
-    conexion.query(query, [nuevoStock, id], (error) => {
-      if (error) {
-        console.error('Error actualizando el stock:', error);
-        return res.status(500).send('Error actualizando el stock');
-      }
-  
-      // Redirigir de vuelta a la página de productos
-      res.redirect('/mostrar'); // Cambia esto por tu ruta principal
-    });
+router.post("/actualizar-producto", async (req, res) => {
+  const { id, nombre, precio, stock, marca, imagenAnterior, nuevaImagenUrl } = req.body;
+
+  // 1. Eliminar la imagen anterior si existe
+  if (imagenAnterior) {
+    try {
+      console.log(imagenAnterior)
+      // Eliminar la imagen de Cloudinary
+      const result = await cloudinary.uploader.destroy(imagenAnterior);
+      console.log('Imagen eliminada:', result);
+    } catch (error) {
+      console.error('Error al eliminar la imagen anterior:', error);
+      return res.status(500).send('Error al eliminar la imagen anterior');
+    }
+  }
+
+  // 2. Actualizar los datos del producto en la base de datos
+  const query = "UPDATE producto SET producto = ?, precio = ?, stock = ?, marca = ?, imagen = ? WHERE id = ?";
+  conexion.query(query, [nombre, precio, stock, marca, nuevaImagenUrl, id], (error) => {
+    if (error) {
+      console.error("Error al actualizar el producto:", error);
+      return res.status(500).send("Error al actualizar el producto");
+    }
+    res.json({ message: "Producto actualizado correctamente" });
+  });
 });
 
 module.exports = router;
