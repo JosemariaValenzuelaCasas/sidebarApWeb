@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../css/mostrar.css">
+    <link rel="stylesheet" href="../css/modal.css">
 </head>
 
 <body>
@@ -87,7 +88,7 @@
             <% usuarios.forEach(usuario=> { %>
                 <div class="card">
                     <div class="img-pro">
-                        <img src="/uploads/<%= usuario.imagen %>" alt="Imagen del producto">
+                        <img src="<%= usuario.imagen %>" alt="Imagen del producto">
                     </div>
                     <div class="info-pro">
                         <div class="titulo-pro">
@@ -120,13 +121,39 @@
                                 <p>Bebidas</p>
                             </div>
                         </div>
-                        <form action="/actualizar-stock" method="POST">
-                            <input type="hidden" name="id" value="<%= usuario.id %>">
-                            <input type="hidden" name="stock_actual" value="<%= usuario.stock %>">
-                            <button type="submit">
-                                <ion-icon name="settings-outline"></ion-icon>
-                            </button>
-                        </form>
+                        <!-- Botón de editar en la tarjeta del producto -->
+                        <button class="editar" data-id="<%= usuario.id %>" data-nombre="<%= usuario.producto %>"
+                            data-precio="<%= usuario.precio %>" data-stock="<%= usuario.stock %>"
+                            data-marca="<%= usuario.marca %>" data-imagen="<%= usuario.imagen %>">Editar</button>
+
+                        <!-- Modal (dialog) para editar el producto -->
+                        <dialog class="container" id="modal-editar">
+                            <div class="form-container sign-in" id="form-editar">
+                                <form>
+                                    <h1>Editar Producto</h1>
+                                    <input type="hidden" name="id" id="id-editar">
+                                    <input type="text" id="nombre" name="nombre" placeholder="Nombre del producto">
+                                    <input type="text" id="marca" name="marca" placeholder="Marca">
+                                    <input type="number" id="precio" name="precio" placeholder="Precio">
+                                    <input type="number" id="stock" name="stock" placeholder="Stock">
+
+                                    <button>Guardar Cambios</button>
+                                    <button onclick="closeDialog()">Cerrar</button>
+                                </form>
+                            </div>
+                            <div class="toggle-container">
+                                <div class="toggle-panel toggle-right">
+                                    <div class="imagenProduct">
+                                        <!-- Imagen del producto cargada dinámicamente con JavaScript -->
+                                        <img src="<%= usuario.imagen %>" id="imagenProducto" alt="Imagen del producto">
+                                    </div>
+                                    <button id="register" onclick="activarCargarImagen()">Cambiar Imagen</button>
+                                    <input type="file" id="nuevaImagen" class="hidden" onchange="cambiarImagen(event)">
+                                    <input type="hidden" id="nuevaImagenUrl" name="nuevaImagenUrl" value="">
+                                </div>
+                            </div>
+                        </dialog>
+
                     </div>
                 </div>
                 <% }) %>
@@ -138,6 +165,7 @@
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="../js/script.js"></script>
+    <script src="../js/modalEditarProducto.js"></script>
 </body>
 
 </html>
