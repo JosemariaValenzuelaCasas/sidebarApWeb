@@ -10,6 +10,6 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + path.extname(file.originalname)); // Nombre único para cada archivo
     },
 });
-const upload = multer({ storage });
+const multerUpload = multer({ storage });
 
-module.exports = upload;
+module.exports = multerUpload;
