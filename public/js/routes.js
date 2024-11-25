@@ -1,7 +1,12 @@
 const express = require('express');
 const { conexion, connection } = require('./database');
-const upload = require('./multer');
 const router = express.Router();
+const multer = require('multer');
+const { cloudinary, upload } = require('./cloudinary');
+const fs = require('fs');
+const path = require('path');
+
+// Configuración de multer para almacenar archivos temporalmente
 
 // Ruta para la página principal en "index.html"
 router.get('/', (req, res) => {
@@ -35,11 +40,11 @@ router.get('/eventos', (req, res) => {
     });
 });
 
-router.post("/validar", upload.single("image"), function (req, res) {
+router.post('/validar', upload.single('image'), async function (req, res) {
     const datos = req.body;
-    const imagen = req.file; // Imagen cargada
-
-    if (!imagen) {
+    const imagenLocal = req.file; // Imagen guardada localmente
+    console.log(imagenLocal.path)
+    if (!imagenLocal) {
         return res.status(400).json({ success: false, message: "Error: No se subió ninguna imagen." });
     }
 
@@ -47,20 +52,44 @@ router.post("/validar", upload.single("image"), function (req, res) {
     let celular = datos.phone;
     let email = datos.email;
     let mensaje = datos.message;
-    let imagenRuta = imagen.filename; // Nombre del archivo guardado
 
-    console.log("Datos recibidos:", nombre, celular, email, mensaje, imagenRuta);
+    try {
+        // Subir la imagen desde el almacenamiento local a Cloudinary
+        const resultadoCloudinary = await cloudinary.uploader.upload(imagenLocal.path, {
+            folder: "productos", // Carpeta en Cloudinary
+        });
 
-    let registrar = `INSERT INTO producto (producto, marca, precio, stock, imagen) 
-                     VALUES ('${nombre}', '${celular}', '${email}', '${mensaje}', '${imagenRuta}');`;
+        // Obtener la URL de la imagen subida a Cloudinary
+        const imagenUrl = resultadoCloudinary.secure_url;
 
-    conexion.query(registrar, function (error) {
-        if (error) {
-            return res.status(500).json({ success: false, message: "Error al registrar el producto." });
+        console.log("Imagen subida a Cloudinary:", imagenUrl);
+
+        // Eliminar el archivo local después de subirlo (opcional)
+        if (fs.existsSync(imagenLocal.path)) {
+            fs.unlinkSync(imagenLocal.path);
         }
 
-        res.json({ success: true, message: "Producto registrado correctamente." });
-    });
+        // Guardar los datos en la base de datos
+        let registrar = `INSERT INTO producto (producto, marca, precio, stock, imagen) 
+                         VALUES ('${nombre}', '${celular}', '${email}', '${mensaje}', '${imagenUrl}');`;
+
+        conexion.query(registrar, function (error) {
+            if (error) {
+                return res.status(500).json({ success: false, message: "Error al registrar el producto." });
+            }
+
+            res.json({ success: true, message: "Producto registrado correctamente." });
+        });
+    } catch (error) {
+        console.error("Error al subir a Cloudinary:", error);
+
+        // Si algo falla, elimina el archivo local para limpiar recursos
+        if (imagenLocal && fs.existsSync(imagenLocal.path)) {
+            fs.unlinkSync(imagenLocal.path);
+        }
+
+        res.status(500).json({ success: false, message: "Error al procesar la imagen." });
+    }
 });
 
 router.post("/actualizar-producto", async (req, res) => {
