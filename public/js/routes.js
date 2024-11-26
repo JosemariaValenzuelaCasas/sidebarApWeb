@@ -52,7 +52,7 @@ router.post('/validar', upload.single('image'), async function (req, res) {
     let celular = datos.phone;
     let email = datos.email;
     let mensaje = datos.message;
-
+    let categoria = datos.categoria;
     try {
         // Subir la imagen desde el almacenamiento local a Cloudinary
         const resultadoCloudinary = await cloudinary.uploader.upload(imagenLocal.path, {
@@ -70,8 +70,8 @@ router.post('/validar', upload.single('image'), async function (req, res) {
         }
 
         // Guardar los datos en la base de datos
-        let registrar = `INSERT INTO producto (producto, marca, precio, stock, imagen) 
-                         VALUES ('${nombre}', '${celular}', '${email}', '${mensaje}', '${imagenUrl}');`;
+        let registrar = `INSERT INTO producto (producto, marca, precio, stock, imagen, categoria) 
+                         VALUES ('${nombre}', '${celular}', '${email}', '${mensaje}', '${imagenUrl}', '${categoria}');`;
 
         conexion.query(registrar, function (error) {
             if (error) {
@@ -93,17 +93,18 @@ router.post('/validar', upload.single('image'), async function (req, res) {
 });
 
 router.post('/actualizar-producto', upload.single('imagen'), async (req, res) => {
-    const { id, nombre, precio, stock, marca, imagenCard, imagenModal, nuevaImagen } = req.body;
+    const { id, nombre, precio, stock, marca, categoria, imagenCard, imagenModal, nuevaImagen } = req.body;
     try {
         if (imagenCard !== imagenModal) {
+            console.log("ImagenAntigua: "+imagenCard, "ImagenNueva: "+imagenModal)
             // Actualizar la base de datos con el nuevo secureUrl y los datos del producto
             const queryUpdate = `
                 UPDATE producto 
-                SET producto = ?, precio = ?, stock = ?, marca = ?, imagen = ?
+                SET producto = ?, precio = ?, stock = ?, marca = ?, imagen = ?, categoria = ?
                 WHERE id = ?
             `;
 
-            conexion.query(queryUpdate, [nombre, precio, stock, marca, nuevaImagen, id], (error) => {
+            conexion.query(queryUpdate, [nombre, precio, stock, marca, nuevaImagen, categoria, id], (error) => {
                 if (error) {
                     console.error("Error al actualizar el producto en la base de datos:", error);
                     return res.status(500).send("Error al actualizar el producto");
@@ -114,7 +115,8 @@ router.post('/actualizar-producto', upload.single('imagen'), async (req, res) =>
                     nombre: nombre, // Otros datos que se están actualizando
                     precio: precio,
                     stock: stock,
-                    marca: marca
+                    marca: marca,
+                    categoria: categoria
                 });
             });
 
@@ -122,11 +124,11 @@ router.post('/actualizar-producto', upload.single('imagen'), async (req, res) =>
             // Las imágenes son iguales, solo actualizamos los datos del producto
             const queryUpdate = `
                 UPDATE producto 
-                SET producto = ?, precio = ?, stock = ?, marca = ?
+                SET producto = ?, precio = ?, stock = ?, marca = ?, categoria = ?
                 WHERE id = ?
             `;
 
-            conexion.query(queryUpdate, [nombre, precio, stock, marca, id], (error) => {
+            conexion.query(queryUpdate, [nombre, precio, stock, marca,categoria, id], (error) => {
                 if (error) {
                     console.error("Error al actualizar el producto en la base de datos:", error);
                     return res.status(500).send("Error al actualizar el producto");
@@ -136,7 +138,8 @@ router.post('/actualizar-producto', upload.single('imagen'), async (req, res) =>
                     nombre: nombre, // Otros datos que se están actualizando
                     precio: precio,
                     stock: stock,
-                    marca: marca
+                    marca: marca,
+                    categoria: categoria
                 });
             });
 
@@ -166,6 +169,28 @@ router.post('/upload', upload.single('imagen'), async (req, res) => {
     console.log(nuevoSecureUrl)
     const filePath = nuevoSecureUrl;
     res.json({ filePath });
+});
+
+router.post('/eliminar-imagen', async (req, res) => {
+    const { public_id } = req.body; // Recibir el public_id desde el cliente
+
+    if (!public_id) {
+        return res.status(400).json({ message: 'Falta el public_id de la imagen.' });
+    }
+
+    try {
+        // Eliminar la imagen en Cloudinary
+        const resultado = await cloudinary.uploader.destroy(public_id);
+
+        if (resultado.result !== 'ok') {
+            throw new Error('No se pudo eliminar la imagen.');
+        }
+
+        res.json({ message: 'Imagen eliminada correctamente.', public_id });
+    } catch (error) {
+        console.error('Error al eliminar la imagen:', error);
+        res.status(500).json({ message: 'Error al eliminar la imagen.', error });
+    }
 });
 
 module.exports = router;
