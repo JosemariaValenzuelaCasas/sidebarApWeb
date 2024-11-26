@@ -290,6 +290,7 @@ html, body {
 
 
 .card {
+    position: relative;
     background-color: var(--color-boton);
     border-radius: 10px;
     padding: 10px 1rem;
@@ -355,6 +356,20 @@ html, body {
     display: none;
 }
 
+.botones-producto{
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+
+.delete{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.delete ion-icon{
+    min-width: 40px;
+}
 @media screen and (max-width:500px) {
     .barra-lateral{
         display: none;

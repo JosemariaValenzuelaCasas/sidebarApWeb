@@ -13,6 +13,7 @@ function editarProducto(id) {
     const precio = producto.getAttribute('data-precio');
     const stock = producto.getAttribute('data-stock');
     const marca = producto.getAttribute('data-marca');
+    const categoria = producto.getAttribute('data-categoria');
 
     // Rellena los campos del formulario en la modal correspondiente
     document.getElementById(`id-editar-${id}`).value = id;
@@ -20,6 +21,7 @@ function editarProducto(id) {
     document.getElementById(`precio-${id}`).value = precio;
     document.getElementById(`stock-${id}`).value = stock;
     document.getElementById(`marca-${id}`).value = marca;
+    document.getElementById(`categoria-${id}`).value = categoria;
     document.body.classList.add('no-scroll');
     // Abre el modal correspondiente
     const modal = document.getElementById(`modal-editar-${id}`);

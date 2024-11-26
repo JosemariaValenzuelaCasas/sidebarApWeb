@@ -72,6 +72,7 @@ function guardarCambios(event, id) {
     formData.append('precio', document.getElementById(`precio-${id}`).value);
     formData.append('stock', document.getElementById(`stock-${id}`).value);
     formData.append('marca', document.getElementById(`marca-${id}`).value);
+    formData.append('categoria', document.getElementById(`categoria-${id}`).value);
     formData.append('imagenCard', imagenCard); // URL actual de la imagen
     formData.append('imagenModal', imagenModal); // URL de la imagen de la modal
     formData.append('nuevaImagen', nuevaRuta);
@@ -83,18 +84,46 @@ function guardarCambios(event, id) {
     })
         .then((response) => response.json())
         .then((data) => {
-            console.log(data.imagenNueva)
-            document.getElementById(`imagenProducto2-${id}`).src = data.imagenNueva; // Nueva imagen de la modal
-            document.getElementById(`nombre-${id}`).textContent = data.nombre;
-            document.getElementById(`precio-${id}`).textContent = data.precio;
-            document.getElementById(`stock-${id}`).textContent = data.stock;
-            document.getElementById(`marc-${id}`).textContent = data.marca;
-            // Cerrar el modal
-            closeDialog(id);
+            if(imagenCard !== imagenModal){
+                eliminarImagen(imagenCard);
+                document.getElementById(`imagenProducto2-${id}`).src = data.imagenNueva;
+                document.getElementById(`product-${id}`).textContent = data.nombre;
+                document.getElementById(`prize-${id}`).textContent = data.precio;
+                document.getElementById(`stockk-${id}`).textContent = data.stock;
+                document.getElementById(`marc-${id}`).textContent = data.marca;
+                document.getElementById(`category-${id}`).textContent = data.categoria;
+                const producto = document.querySelector(`button[data-id="${id}"]`);
+                producto.setAttribute('data-nombre', data.nombre);
+                producto.setAttribute('data-precio', data.precio);
+                producto.setAttribute('data-stock', data.stock);
+                producto.setAttribute('data-marca', data.marca);
+                producto.setAttribute('data-categoria', data.categoria);
 
-            // Rehabilitar el botón y restablecer el texto
-            botonGuardar.disabled = false;
-            botonGuardar.textContent = 'Guardar Cambios'; // Cambiar el texto del botón de vuelta a su estado original
+                closeDialog(id);
+    
+                // Rehabilitar el botón y restablecer el texto
+                botonGuardar.disabled = false;
+                botonGuardar.textContent = 'Guardar Cambios';
+            }else{
+                document.getElementById(`product-${id}`).textContent = data.nombre;
+                document.getElementById(`prize-${id}`).textContent = data.precio;
+                document.getElementById(`stockk-${id}`).textContent = data.stock;
+                document.getElementById(`marc-${id}`).textContent = data.marca;
+                document.getElementById(`category-${id}`).textContent = data.categoria;
+                console.log("nuevos.datos: ",data)
+                const producto = document.querySelector(`button[data-id="${id}"]`);
+                producto.setAttribute('data-nombre', data.nombre);
+                producto.setAttribute('data-precio', data.precio);
+                producto.setAttribute('data-stock', data.stock);
+                producto.setAttribute('data-marca', data.marca);
+                producto.setAttribute('data-categoria', data.categoria);
+                console.log("producto nuevo?:",producto)
+                closeDialog(id);
+                // Rehabilitar el botón y restablecer el texto
+                botonGuardar.disabled = false;
+                botonGuardar.textContent = 'Guardar Cambios';
+            }
+             // Cambiar el texto del botón de vuelta a su estado original
         })
         .catch((error) => {
             console.error('Error al guardar cambios:', error);
@@ -104,4 +133,35 @@ function guardarCambios(event, id) {
         });
 }
 
+function eliminarImagen(imagenCard){
+    
+    const url = imagenCard;
+    
+// Extraer el public ID ignorando la versión
+    const publicId = url
+        .split('/image/upload/')[1]  // Quita la parte antes de "image/upload/"
+        .replace(/^v\d+\//, '')      // Elimina el prefijo de versión como "v1732632519/"
+        .replace(/\.[^/.]+$/, '');   // Quita la extensión del archivo (.png, .jpg, etc.)
 
+    console.log(publicId); // Resultado: "productos/bmei4r70t18amzoaupjd"
+
+    fetch('/eliminar-imagen', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ public_id: publicId }),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('No se pudo eliminar la imagen.');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data.message);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
