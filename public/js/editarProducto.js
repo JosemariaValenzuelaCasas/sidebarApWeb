@@ -1,10 +1,8 @@
 let nuevaRuta='';
-function ruta(id){
-    nuevaRuta=document.getElementById(`imagenProducto2-${id}`).src;
-}
 function activarCargarImagen(id) {
     // Mostrar el input para que el usuario seleccione una nueva imagen
     document.getElementById(`nuevaImagen-${id}`).click();
+    
 }
 
 function cambiarImagen(event, id) {
@@ -60,7 +58,6 @@ function obtenerIdDeImagen(imagenUrl) {
 
 function guardarCambios(event, id) {
     event.preventDefault();
-
     // Deshabilitar el botón y cambiar su texto a "Guardando..."
     const botonGuardar = document.getElementById(`guardar-cambios-${id}`);
     botonGuardar.disabled = true;
@@ -86,13 +83,12 @@ function guardarCambios(event, id) {
     })
         .then((response) => response.json())
         .then((data) => {
-            // Actualizar los elementos con los nuevos valores
-            document.getElementById(`imagenProducto2-${id}`).src = nuevaRuta; // Nueva imagen de la modal
+            console.log(data.imagenNueva)
+            document.getElementById(`imagenProducto2-${id}`).src = data.imagenNueva; // Nueva imagen de la modal
             document.getElementById(`nombre-${id}`).textContent = data.nombre;
             document.getElementById(`precio-${id}`).textContent = data.precio;
             document.getElementById(`stock-${id}`).textContent = data.stock;
-            document.getElementById(`marca-${id}`).textContent = data.marca;
-
+            document.getElementById(`marc-${id}`).textContent = data.marca;
             // Cerrar el modal
             closeDialog(id);
 

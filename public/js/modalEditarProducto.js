@@ -8,6 +8,7 @@ function closeDialog(id) {
 function editarProducto(id) {
     // Recupera los datos del producto usando el data-* atributos
     const producto = document.querySelector(`button[data-id="${id}"]`);
+    console.log(producto)
     const nombre = producto.getAttribute('data-nombre');
     const precio = producto.getAttribute('data-precio');
     const stock = producto.getAttribute('data-stock');
