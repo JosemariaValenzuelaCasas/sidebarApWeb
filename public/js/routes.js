@@ -29,7 +29,7 @@ router.get("/mostrar", function (req, res) {
 });
 
 router.get('/eventos', (req, res) => {
-    const query = 'SELECT * FROM calendarioCivico ORDER BY fecha DESC LIMIT 1'; 
+    const query = 'SELECT * FROM calendarioCivico ORDER BY fecha DESC LIMIT 1';
 
     connection.query(query, (err, results) => {
         if (err) {
@@ -92,31 +92,84 @@ router.post('/validar', upload.single('image'), async function (req, res) {
     }
 });
 
-router.post("/actualizar-producto", async (req, res) => {
-  const { id, nombre, precio, stock, marca, imagenAnterior, nuevaImagenUrl } = req.body;
-
-  // 1. Eliminar la imagen anterior si existe
-  if (imagenAnterior) {
+router.post('/actualizar-producto', upload.single('imagen'), async (req, res) => {
+    const { id, nombre, precio, stock, marca, imagenCard, imagenModal, nuevaImagen } = req.body;
     try {
-      console.log(imagenAnterior)
-      // Eliminar la imagen de Cloudinary
-      const result = await cloudinary.uploader.destroy(imagenAnterior);
-      console.log('Imagen eliminada:', result);
-    } catch (error) {
-      console.error('Error al eliminar la imagen anterior:', error);
-      return res.status(500).send('Error al eliminar la imagen anterior');
-    }
-  }
+        if (imagenCard !== imagenModal) {
+            // Actualizar la base de datos con el nuevo secureUrl y los datos del producto
+            const queryUpdate = `
+                UPDATE producto 
+                SET producto = ?, precio = ?, stock = ?, marca = ?, imagen = ?
+                WHERE id = ?
+            `;
 
-  // 2. Actualizar los datos del producto en la base de datos
-  const query = "UPDATE producto SET producto = ?, precio = ?, stock = ?, marca = ?, imagen = ? WHERE id = ?";
-  conexion.query(query, [nombre, precio, stock, marca, nuevaImagenUrl, id], (error) => {
-    if (error) {
-      console.error("Error al actualizar el producto:", error);
-      return res.status(500).send("Error al actualizar el producto");
+            conexion.query(queryUpdate, [nombre, precio, stock, marca, nuevaImagen, id], (error) => {
+                if (error) {
+                    console.error("Error al actualizar el producto en la base de datos:", error);
+                    return res.status(500).send("Error al actualizar el producto");
+                }
+                res.json({
+                    imagenNueva: nuevaImagen, // La nueva URL de la imagen
+                    nombre: nombre, // Otros datos que se están actualizando
+                    precio: precio,
+                    stock: stock,
+                    marca: marca
+                });
+            });
+
+        } else {
+            // Las imágenes son iguales, solo actualizamos los datos del producto
+            const queryUpdate = `
+                UPDATE producto 
+                SET producto = ?, precio = ?, stock = ?, marca = ?
+                WHERE id = ?
+            `;
+
+            conexion.query(queryUpdate, [nombre, precio, stock, marca, id], (error) => {
+                if (error) {
+                    console.error("Error al actualizar el producto en la base de datos:", error);
+                    return res.status(500).send("Error al actualizar el producto");
+                }
+                res.json({
+                    imagenModal: imagenCard, // La nueva URL de la imagen
+                    nombre: nombre, // Otros datos que se están actualizando
+                    precio: precio,
+                    stock: stock,
+                    marca: marca
+                });
+            });
+
+        }
+    } catch (error) {
+        console.error('Error al actualizar el producto:', error);
+        return res.status(500).json({
+            mensaje: 'Hubo un problema al actualizar el producto'
+        });
     }
-    res.json({ message: "Producto actualizado correctamente" });
-  });
+});
+
+
+router.post('/upload', upload.single('imagen'), async (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ message: 'No se envió ningún archivo.' });
+    }
+    console.log(req.file)
+
+    const nuevaImagen = req.file;
+    console.log("Archivo cargado:", nuevaImagen);
+    const resultadoCloudinary = await cloudinary.uploader.upload(nuevaImagen.path, {
+        folder: 'productos' // Carpeta en Cloudinary
+    });
+
+    console.log(nuevaImagen)
+    if (fs.existsSync(nuevaImagen.path)) {
+        fs.unlinkSync(nuevaImagen.path); // Eliminar archivo local
+    }
+
+    const nuevoSecureUrl = resultadoCloudinary.secure_url;
+    // Generar la ruta para el cliente
+    const filePath = nuevoSecureUrl;
+    res.json({ filePath });
 });
 
 module.exports = router;

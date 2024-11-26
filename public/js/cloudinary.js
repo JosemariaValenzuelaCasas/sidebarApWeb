@@ -11,14 +11,17 @@ cloudinary.config({
 
 // Configuración de almacenamiento en disco con Multer
 const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "public/uploads"); // Carpeta donde se guardarán las imágenes localmente
+    destination: function (req, file, cb) {
+      // Define la carpeta donde se almacenarán los archivos subidos
+      cb(null, 'public/uploads');
     },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + path.extname(file.originalname)); // Nombre único para el archivo
-    },
+    filename: function (req, file, cb) {
+      // Si quieres conservar el nombre original del archivo, usa `file.originalname`
+      cb(null, Date.now() + path.extname(file.originalname)); // Si deseas usar un nombre único
+    }
 });
 
-const upload = multer({ storage });
+  // Crear la instancia de multer con la configuración de almacenamiento
+const upload = multer({ storage: storage });
 
 module.exports = { cloudinary, upload };

@@ -346,10 +346,15 @@ html, body {
     align-items: center;
 }
 
-.card button{
+.card .editar {
     width: 100px;
     margin: 0 auto;
 }
+
+.hidden{
+    display: none;
+}
+
 @media screen and (max-width:500px) {
     .barra-lateral{
         display: none;
