@@ -110,9 +110,9 @@
                                     <%= usuario.precio %>
                                 </p>
                             </div>
-                            <div class="marca">
+                            <div class="marca" >
                                 <h3>MARCA</h3>
-                                <p>
+                                <p id="marc-<%= usuario.id %>">
                                     <%= usuario.marca %>
                                 </p>
                             </div>
@@ -130,7 +130,7 @@
                         <!-- Modal (dialog) para editar el producto, ahora con un id único por producto -->
                         <dialog class="container" id="modal-editar-<%= usuario.id %>">
                             <div class="form-container sign-in" id="form-editar">
-                                <form onsubmit=" guardarCambios(event, '<%= usuario.id %>')"> 
+                                <form onsubmit="guardarCambios(event, '<%= usuario.id %>')">
                                     <h1>Editar Producto</h1> 
                                     <input type="hidden" name="id" id="id-editar-<%= usuario.id %>">
                                     <input type="text" id="nombre-<%= usuario.id %>" name="nombre" placeholder="Nombre del producto">

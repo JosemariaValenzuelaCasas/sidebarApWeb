@@ -108,6 +108,7 @@ router.post('/actualizar-producto', upload.single('imagen'), async (req, res) =>
                     console.error("Error al actualizar el producto en la base de datos:", error);
                     return res.status(500).send("Error al actualizar el producto");
                 }
+                console.log(nuevaImagen)
                 res.json({
                     imagenNueva: nuevaImagen, // La nueva URL de la imagen
                     nombre: nombre, // Otros datos que se están actualizando
@@ -131,7 +132,7 @@ router.post('/actualizar-producto', upload.single('imagen'), async (req, res) =>
                     return res.status(500).send("Error al actualizar el producto");
                 }
                 res.json({
-                    imagenModal: imagenCard, // La nueva URL de la imagen
+                    imagenNueva:nuevaImagen,
                     nombre: nombre, // Otros datos que se están actualizando
                     precio: precio,
                     stock: stock,
@@ -153,23 +154,24 @@ router.post('/upload', upload.single('imagen'), async (req, res) => {
     if (!req.file) {
         return res.status(400).json({ message: 'No se envió ningún archivo.' });
     }
-    console.log(req.file)
-
     const nuevaImagen = req.file;
-    console.log("Archivo cargado:", nuevaImagen);
     const resultadoCloudinary = await cloudinary.uploader.upload(nuevaImagen.path, {
         folder: 'productos' // Carpeta en Cloudinary
     });
-
-    console.log(nuevaImagen)
     if (fs.existsSync(nuevaImagen.path)) {
         fs.unlinkSync(nuevaImagen.path); // Eliminar archivo local
     }
 
     const nuevoSecureUrl = resultadoCloudinary.secure_url;
-    // Generar la ruta para el cliente
+    console.log(nuevoSecureUrl)
     const filePath = nuevoSecureUrl;
     res.json({ filePath });
 });
 
 module.exports = router;
+
+
+
+//lee esto webonazo el cambio de imagen funciona bien, debes implementar una solucion para cuando no se cambia la imagen
+//Y no te olvides de los else de la funcion para actualizar la base de datos, prueba los errores, recuerda que debe estar bien pulido
+//probablemente usemos la misma funcion para editar modales en el apartado de la generacion de registros de venta.
