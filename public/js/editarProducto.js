@@ -88,10 +88,10 @@ function guardarCambios(event, id) {
                 eliminarImagen(imagenCard);
                 document.getElementById(`imagenProducto2-${id}`).src = data.imagenNueva;
                 document.getElementById(`product-${id}`).textContent = data.nombre;
-                document.getElementById(`prize-${id}`).textContent = data.precio;
-                document.getElementById(`stockk-${id}`).textContent = data.stock;
-                document.getElementById(`marc-${id}`).textContent = data.marca;
-                document.getElementById(`category-${id}`).textContent = data.categoria;
+                document.getElementById(`prize-${id}`).textContent = "Precio: S/."+data.precio;
+                document.getElementById(`stockk-${id}`).textContent = "Stock: "+data.stock;
+                document.getElementById(`marc-${id}`).textContent = "Marca :"+data.marca;
+                document.getElementById(`category-${id}`).textContent = "Categoría: "+data.categoria
                 const producto = document.querySelector(`button[data-id="${id}"]`);
                 producto.setAttribute('data-nombre', data.nombre);
                 producto.setAttribute('data-precio', data.precio);
@@ -106,17 +106,17 @@ function guardarCambios(event, id) {
                 botonGuardar.textContent = 'Guardar Cambios';
             }else{
                 document.getElementById(`product-${id}`).textContent = data.nombre;
-                document.getElementById(`prize-${id}`).textContent = data.precio;
-                document.getElementById(`stockk-${id}`).textContent = data.stock;
-                document.getElementById(`marc-${id}`).textContent = data.marca;
-                document.getElementById(`category-${id}`).textContent = data.categoria;
+                document.getElementById(`prize-${id}`).textContent = "Precio: S/."+data.precio;
+                document.getElementById(`stockk-${id}`).textContent = "Stock: "+data.stock;
+                document.getElementById(`marc-${id}`).textContent = "Marca :"+data.marca;
+                document.getElementById(`category-${id}`).textContent = "Categoría: "+data.categoria
                 console.log("nuevos.datos: ",data)
                 const producto = document.querySelector(`button[data-id="${id}"]`);
                 producto.setAttribute('data-nombre', data.nombre);
                 producto.setAttribute('data-precio', data.precio);
                 producto.setAttribute('data-stock', data.stock);
                 producto.setAttribute('data-marca', data.marca);
-                producto.setAttribute('data-categoria', data.categoria);
+                producto.setAttribute('data-categoria',data.categoria);
                 console.log("producto nuevo?:",producto)
                 closeDialog(id);
                 // Rehabilitar el botón y restablecer el texto
