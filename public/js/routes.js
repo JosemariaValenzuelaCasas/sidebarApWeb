@@ -1,10 +1,8 @@
 const express = require('express');
 const { conexion, connection } = require('./database');
 const router = express.Router();
-const multer = require('multer');
 const { cloudinary, upload } = require('./cloudinary');
 const fs = require('fs');
-const path = require('path');
 
 // Configuración de multer para almacenar archivos temporalmente
 

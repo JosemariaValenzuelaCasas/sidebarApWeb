@@ -91,92 +91,78 @@
                         <input type="checkbox" class="select-product" value="<%= usuario.id %>" id="label-<%= usuario.id %>">
                         <span class="checkmark"></span>
                     </label>
-                    <label for="label-<%= usuario.id %>"></label>
-                    <div class="img-pro">
+                    <div class="product-img-container">
                         <img src="<%= usuario.imagen %>" id="imagenProducto2-<%= usuario.id %>"
-                            alt="Imagen del producto">
+                                    alt="Imagen del producto" class="product-img">
                     </div>
-                    <div class="info-pro">
-                        <div class="titulo-pro">
-                            <h2 id="product-<%= usuario.id %>">
-                                <%= usuario.producto %>
-                            </h2>
-                            <div class="card-linea"></div>
-                        </div> 
-                        <div class="datos-pro">
-                            <div class="stock">
-                                <h3>STOCK</h3>
-                                <p id="stockk-<%= usuario.id %>">
-                                    <%= usuario.stock %>
-                                </p>
-                            </div>
-                            <div class="precio">
-                                <h3>PRECIO</h3>
-                                <p id="prize-<%= usuario.id %>">
-                                    <%= usuario.precio %>
-                                </p>
-                            </div>
-                            <div class="marca">
-                                <h3>MARCA</h3>
-                                <p id="marc-<%= usuario.id %>">
-                                    <%= usuario.marca %>
-                                </p>
-                            </div>
-                            <div class="categoria">
-                                <h3>CATEGORIA</h3>
-                                <p id="category-<%= usuario.id %>">
-                                    <%= usuario.categoria %>
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Botón de editar en la tarjeta del producto -->
-                        <div class="botones-producto">
-                            <button data-id="<%= usuario.id %>" data-nombre="<%= usuario.producto %>"
-                                data-precio="<%= usuario.precio %>" data-stock="<%= usuario.stock %>"
-                                data-marca="<%= usuario.marca %>" data-categoria="<%= usuario.categoria %>"
-                                onclick="editarProducto('<%= usuario.id %>')">
-                                Editar
-                            </button>
-                        </div>
-
-
-
-                        <!-- Modal (dialog) para editar el producto, ahora con un id único por producto -->
-                        <dialog class="container" id="modal-editar-<%= usuario.id %>">
-                            <div class="form-container sign-in" id="form-editar">
-                                <form onsubmit="guardarCambios(event, '<%= usuario.id %>')">
-                                    <h1>Editar Producto</h1>
-                                    <input type="hidden" name="id" id="id-editar-<%= usuario.id %>">
+                    <div class="product-info">
+                        <h3 id="product-<%= usuario.id %>" class="product-name"><%= usuario.producto %></h3>
+                        <p id="stockk-<%= usuario.id %>" class="product-stock">Stock: <%= usuario.stock %></p>
+                        <p id="category-<%= usuario.id %>" class="product-category">Categoría: <%= usuario.categoria %></p>
+                        <p id="marc-<%= usuario.id %>" class="product-brand">Marca: <%= usuario.marca %></p>
+                        <p id="prize-<%= usuario.id %>" class="product-price">Precio: S/.<%= usuario.precio %></p>
+                        
+                    </div>
+                    <div class="botones-producto">
+                        <button data-id="<%= usuario.id %>" data-nombre="<%= usuario.producto %>"
+                            data-precio="<%= usuario.precio %>" data-stock="<%= usuario.stock %>"
+                            data-marca="<%= usuario.marca %>" data-categoria="<%= usuario.categoria %>"
+                            onclick="editarProducto('<%= usuario.id %>')">
+                            Editar
+                        </button>
+                    </div>
+                    <dialog class="container" id="modal-editar-<%= usuario.id %>">
+                        <div class="form-container sign-in" id="form-editar">
+                            <form onsubmit="guardarCambios(event, '<%= usuario.id %>')">
+                                <h1>Editar Producto</h1>
+                                <input type="hidden" name="id" id="id-editar-<%= usuario.id %>">
+                                <div class="input-group">
+                                    <span>Nombre:</span>
                                     <input type="text" id="nombre-<%= usuario.id %>" name="nombre"
                                         placeholder="Nombre del producto">
-                                    <input type="text" id="marca-<%= usuario.id %>" name="marca" placeholder="Marca">
-                                    <input type="number" id="precio-<%= usuario.id %>" name="precio"
-                                        placeholder="Precio">
+                                </div>
+                                <div class="input-group">
+                                    <span>Stock:</span>
                                     <input type="number" id="stock-<%= usuario.id %>" name="stock" placeholder="Stock">
+                                </div>
+                                <div class="input-group">
+                                    <span>Categoria:</span>
                                     <input type="text" id="categoria-<%= usuario.id %>" name="categoria"
-                                        placeholder="Categoria">
-                                    <button id="guardar-cambios-<%= usuario.id %>" type="submit">Guardar
-                                        Cambios</button>
-                                    <button type="button" onclick="closeDialog('<%= usuario.id %>')"">Cerrar</button>
-                                </form>
-                            </div>
-                            <div class=" toggle-container">
-                                        <div class="toggle-panel toggle-right">
-                                            <div class="imagenProduct">
-                                                <!-- Imagen del producto cargada dinámicamente con JavaScript -->
-                                                <img src="<%= usuario.imagen %>" id="imagenProducto-<%= usuario.id %>"
-                                                    data-url="<%= usuario.imagen %>" alt="Imagen del producto">
-                                            </div>
-                                            <button id="register-<%= usuario.id %>"
-                                                onclick="activarCargarImagen('<%= usuario.id %>')">Cambiar
-                                                Imagen</button>
-                                            <input type="file" id="nuevaImagen-<%= usuario.id %>" class="hidden"
-                                                onchange="cambiarImagen(event, '<%= usuario.id %>')">
+                                    placeholder="Categoria">
+                                </div>
+                                <div class="input-group">
+                                    <span>Marca:</span>
+                                    <input type="text" id="marca-<%= usuario.id %>" name="marca" placeholder="Marca">
+                                </div>
+                                
+                                <div class="input-group">
+                                    <span>Precio:</span>
+                                    <div class="money-input">
+                                        <span class="currency-symbol">S/</span>
+                                        <input type="number" id="precio-<%= usuario.id %>" name="precio" placeholder="0.00" step="0.50" min="0">
+                                    </div>
+                                    
+                                </div>
+                                <button id="guardar-cambios-<%= usuario.id %>" type="submit">Guardar
+                                    Cambios</button>
+                                <button type="button" onclick="closeDialog('<%= usuario.id %>')"">Cerrar</button>
+                            </form>
+                        </div>
+                        <div class=" toggle-container">
+                                    <div class="toggle-panel toggle-right">
+                                        <div class="imagenProduct">
+                                            <!-- Imagen del producto cargada dinámicamente con JavaScript -->
+                                            <img src="<%= usuario.imagen %>" id="imagenProducto-<%= usuario.id %>"
+                                                data-url="<%= usuario.imagen %>" alt="Imagen del producto">
                                         </div>
-                            </div>
-                        </dialog>
-                    </div>
+                                        <button id="register-<%= usuario.id %>"
+                                            onclick="activarCargarImagen('<%= usuario.id %>')">Cambiar
+                                            Imagen</button>
+                                        <input type="file" id="nuevaImagen-<%= usuario.id %>" class="hidden"
+                                            onchange="cambiarImagen(event, '<%= usuario.id %>')">
+                                    </div>
+                        </div>
+                    </dialog>
                 </div>
                 <% }) %>
         </div>
