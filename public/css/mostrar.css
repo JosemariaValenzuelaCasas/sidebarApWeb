@@ -60,6 +60,7 @@ html, body {
     position: fixed;
     width: 280px;
     height: 100%;
+    top: 0;
     overflow: hidden;
     border-right: 1px solid var(--neutral);
     background-color: var(--color-barra-lateral);
@@ -241,6 +242,7 @@ html, body {
 }
 
 .main {
+    position: relative;
     margin-left: 280px;
     height: 100%;
     transition: margin-left 0.5s ease;
@@ -254,11 +256,15 @@ html, body {
 /* TOP BAR*/
 .topbar {
     height: 64px;
+    width: 100%;
+    top: 0;
     display: flex;
     align-items: center;
+    background-color: var(--color-barra-lateral);
     padding: 0 16px;
     border-bottom: 1px solid var(--neutral);
-    position: relative;
+    position: fixed;
+    z-index: 500;
 }
 
 .topbar .menu-bton ion-icon {
@@ -267,6 +273,7 @@ html, body {
 
 /*MAIN DATOS SUPERIORES*/
 .stadist {
+    margin-top: 70px;
     padding: 1rem;
     display: grid;
     grid-template-columns:1fr 1fr; /* Dos columnas iguales */
