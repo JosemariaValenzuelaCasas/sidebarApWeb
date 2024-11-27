@@ -18,7 +18,7 @@ router.get("/formulario", function (req, res) {
 });
 
 router.get("/mostrar", function (req, res) {
-    const consulta = "SELECT * FROM producto";
+    const consulta = "SELECT * FROM producto WHERE producto_estado=1";
     conexion.query(consulta, function (error, resultados) {
         if (error) {
             res.status(500).send("Error al obtener datos de la base de datos");
@@ -193,7 +193,27 @@ router.post('/eliminar-imagen', async (req, res) => {
     }
 });
 
+router.put('/productos/eliminar', (req, res) => {
+    const { ids } = req.body; // Recibe los IDs del cliente
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+        return res.status(400).send('No se enviaron productos para eliminar.');
+    }
+
+    // Actualiza el estado de los productos en la base de datos
+    const query = 'UPDATE producto SET producto_estado = 0 WHERE id IN (?)';
+    conexion.query(query, [ids], (error, results) => {
+        if (error) {
+            console.error(error);
+            return res.status(500).send('Error al eliminar los productos.');
+        }
+        res.send('Productos eliminados correctamente.');
+    });
+});
+
 module.exports = router;
+
+
 
 
 

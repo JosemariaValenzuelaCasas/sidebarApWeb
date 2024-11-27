@@ -265,19 +265,6 @@ html, body {
     font-size: 28px;
 }
 
-/*.main .banner {
-    top: 0;
-    left: 0;
-    position: fixed;
-    width: 100%;
-    height: 100vh;
-    background: url(/evaCua/imagen/banner.jpg);
-    background-size: cover;
-    background-repeat: no-repeat;
-    z-index: 0;
-}*/
-
-
 /*MAIN DATOS SUPERIORES*/
 .stadist {
     padding: 1rem;
@@ -292,6 +279,13 @@ html, body {
 .card {
     position: relative;
     background-color: var(--color-boton);
+    border-radius: 10px;
+    display: flex;
+    height: 180px;
+}
+.product-card{
+    position: relative;
+    width: 100%;
     border-radius: 10px;
     padding: 10px 1rem;
     display: flex;
@@ -362,14 +356,43 @@ html, body {
     align-items: center;
 }
 
-.delete{
+.custom_checkbox{
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0;
+    min-width: 35px;
+    height: 35px;
+    cursor: pointer;
 }
-.delete ion-icon{
-    min-width: 40px;
+
+.custom_checkbox input{
+    display: none;
 }
+
+.custom_checkbox .checkmark{
+    width: 100%;
+    height: 100%;
+    border:none;
+    display: inline-block;
+    border-radius: 5px;
+    background: none;
+    background-size: 500%;
+    transition: background-size 0.1s ease;
+} 
+
+.custom_checkbox input:checked + .checkmark{
+    background: #111 url(../image/checkmark.svg) center/60% no-repeat;
+    transition: background-size 0.25s cubic-bezier(0.7,0,0.18,1.24);
+}
+
+.checkbox {
+    display: none; /* Ocultar el checkbox */
+}
+
+.checkbox:checked + .producto-card {
+    background-color: #e0f7fa; /* Cambia el fondo cuando el checkbox está seleccionado */
+}
+
 @media screen and (max-width:500px) {
     .barra-lateral{
         display: none;
@@ -398,7 +421,10 @@ html, body {
 
 @media screen and (max-width:1080px) {
     .card{
-        flex-direction: column;
+        max-height: 350px;
         height: auto;
+    }
+    .product-card{
+        flex-direction: column;
     }
 }
