@@ -86,7 +86,7 @@
 
         <div class="stadist">
             <% usuarios.forEach(usuario=> { %>
-                <div class="card">
+                <div class="card" onclick="toggleCheckbox(this)">
                     <label class="custom_checkbox">
                         <input type="checkbox" class="select-product" value="<%= usuario.id %>" id="label-<%= usuario.id %>">
                         <span class="checkmark"></span>
@@ -102,7 +102,7 @@
                                 <%= usuario.producto %>
                             </h2>
                             <div class="card-linea"></div>
-                        </div>
+                        </div> 
                         <div class="datos-pro">
                             <div class="stock">
                                 <h3>STOCK</h3>
@@ -189,6 +189,7 @@
     <script src="../js/editarProducto.js"></script>
     <script src="../js/modalEditarProducto.js"></script>
     <script src="../js/eliminarProducto.js"></script>
+    <script src="../js/checkbox.js"></script>
 </body>
 
 </html>
