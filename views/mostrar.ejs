@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../css/mostrar.css">
+    <link rel="stylesheet" href="../css/modal.css">
 </head>
 
 <body>
@@ -80,51 +81,104 @@
             <div class="menu-bton">
                 <ion-icon id="menu" name="menu-outline"></ion-icon>
             </div>
-
+            <button onclick="eliminarProductosSeleccionados()"><ion-icon name="trash-outline"></button>
         </div>
 
         <div class="stadist">
             <% usuarios.forEach(usuario=> { %>
-                <div class="card">
+                <div class="card" onclick="toggleCheckbox(this)">
+                    <label class="custom_checkbox">
+                        <input type="checkbox" class="select-product" value="<%= usuario.id %>" id="label-<%= usuario.id %>">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label for="label-<%= usuario.id %>"></label>
                     <div class="img-pro">
-                        <img src="/imagen/producto1.png" alt="">
+                        <img src="<%= usuario.imagen %>" id="imagenProducto2-<%= usuario.id %>"
+                            alt="Imagen del producto">
                     </div>
                     <div class="info-pro">
                         <div class="titulo-pro">
-                            <h2>
+                            <h2 id="product-<%= usuario.id %>">
                                 <%= usuario.producto %>
                             </h2>
                             <div class="card-linea"></div>
-                        </div>
+                        </div> 
                         <div class="datos-pro">
                             <div class="stock">
                                 <h3>STOCK</h3>
-                                <p>
-                                    <%= usuario.precio %>
+                                <p id="stockk-<%= usuario.id %>">
+                                    <%= usuario.stock %>
                                 </p>
                             </div>
                             <div class="precio">
                                 <h3>PRECIO</h3>
-                                <p>
+                                <p id="prize-<%= usuario.id %>">
                                     <%= usuario.precio %>
                                 </p>
                             </div>
-                            <div class="categoria">
+                            <div class="marca">
                                 <h3>MARCA</h3>
-                                <p>
+                                <p id="marc-<%= usuario.id %>">
                                     <%= usuario.marca %>
                                 </p>
                             </div>
                             <div class="categoria">
                                 <h3>CATEGORIA</h3>
-                                <p>Bebidas</p>
+                                <p id="category-<%= usuario.id %>">
+                                    <%= usuario.categoria %>
+                                </p>
                             </div>
                         </div>
-                        <button>agregar</button>
+
+                        <!-- Botón de editar en la tarjeta del producto -->
+                        <div class="botones-producto">
+                            <button data-id="<%= usuario.id %>" data-nombre="<%= usuario.producto %>"
+                                data-precio="<%= usuario.precio %>" data-stock="<%= usuario.stock %>"
+                                data-marca="<%= usuario.marca %>" data-categoria="<%= usuario.categoria %>"
+                                onclick="editarProducto('<%= usuario.id %>')">
+                                Editar
+                            </button>
+                        </div>
+
+
+
+                        <!-- Modal (dialog) para editar el producto, ahora con un id único por producto -->
+                        <dialog class="container" id="modal-editar-<%= usuario.id %>">
+                            <div class="form-container sign-in" id="form-editar">
+                                <form onsubmit="guardarCambios(event, '<%= usuario.id %>')">
+                                    <h1>Editar Producto</h1>
+                                    <input type="hidden" name="id" id="id-editar-<%= usuario.id %>">
+                                    <input type="text" id="nombre-<%= usuario.id %>" name="nombre"
+                                        placeholder="Nombre del producto">
+                                    <input type="text" id="marca-<%= usuario.id %>" name="marca" placeholder="Marca">
+                                    <input type="number" id="precio-<%= usuario.id %>" name="precio"
+                                        placeholder="Precio">
+                                    <input type="number" id="stock-<%= usuario.id %>" name="stock" placeholder="Stock">
+                                    <input type="text" id="categoria-<%= usuario.id %>" name="categoria"
+                                        placeholder="Categoria">
+                                    <button id="guardar-cambios-<%= usuario.id %>" type="submit">Guardar
+                                        Cambios</button>
+                                    <button type="button" onclick="closeDialog('<%= usuario.id %>')"">Cerrar</button>
+                                </form>
+                            </div>
+                            <div class=" toggle-container">
+                                        <div class="toggle-panel toggle-right">
+                                            <div class="imagenProduct">
+                                                <!-- Imagen del producto cargada dinámicamente con JavaScript -->
+                                                <img src="<%= usuario.imagen %>" id="imagenProducto-<%= usuario.id %>"
+                                                    data-url="<%= usuario.imagen %>" alt="Imagen del producto">
+                                            </div>
+                                            <button id="register-<%= usuario.id %>"
+                                                onclick="activarCargarImagen('<%= usuario.id %>')">Cambiar
+                                                Imagen</button>
+                                            <input type="file" id="nuevaImagen-<%= usuario.id %>" class="hidden"
+                                                onchange="cambiarImagen(event, '<%= usuario.id %>')">
+                                        </div>
+                            </div>
+                        </dialog>
                     </div>
                 </div>
                 <% }) %>
-
         </div>
     </div>
 
@@ -132,6 +186,10 @@
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="../js/script.js"></script>
+    <script src="../js/editarProducto.js"></script>
+    <script src="../js/modalEditarProducto.js"></script>
+    <script src="../js/eliminarProducto.js"></script>
+    <script src="../js/checkbox.js"></script>
 </body>
 
 </html>
