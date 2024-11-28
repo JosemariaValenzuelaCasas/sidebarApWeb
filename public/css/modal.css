@@ -102,6 +102,35 @@ form label{
     transition: all 0.6s ease-in-out;
 }
 
+.input-group {
+    width: 100%;
+    display: flex;
+    align-items: center; /* Alinea verticalmente texto e input */
+    gap: 8px; /* Espacio entre el texto y el input */
+}
+
+.money-input {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 200px; /* Ajusta el ancho según necesites */
+}
+
+.currency-symbol {
+    position: absolute;
+    left: 10px;
+    font-size: 1rem;
+    color: #666;
+    pointer-events: none; /* No permite interacción del usuario */
+}
+
+.money-input input {
+    width: 100%;
+    padding-left: 30px; /* Espacio para el símbolo */
+    box-sizing: border-box;
+}
+
+
 .sign-in{
     left: 0;
     width: 50%;

@@ -1,12 +1,24 @@
 const express = require('express');
 const { conexion, connection } = require('./database');
 const router = express.Router();
-const multer = require('multer');
 const { cloudinary, upload } = require('./cloudinary');
 const fs = require('fs');
-const path = require('path');
-
+const { auth, signInWithEmailAndPassword } = require("./firebase/firebaseNode.js");
 // Configuración de multer para almacenar archivos temporalmente
+const admin = require('firebase-admin');
+
+
+// Inicializa Firebase Admin con tus credenciales
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(require("./firebase/config/configKey.json"))
+  });
+} else {
+  admin.app(); // Usa la app ya existente si está inicializada
+}
+
+// Ahora puedes usar los servicios de Firebase
+const getAuth = admin.auth;
 
 // Ruta para la página principal en "index.html"
 router.get('/', (req, res) => {
@@ -17,16 +29,6 @@ router.get("/formulario", function (req, res) {
     res.render("formulario");
 });
 
-router.get("/mostrar", function (req, res) {
-    const consulta = "SELECT * FROM producto WHERE producto_estado=1";
-    conexion.query(consulta, function (error, resultados) {
-        if (error) {
-            res.status(500).send("Error al obtener datos de la base de datos");
-        } else {
-            res.render("mostrar", { usuarios: resultados });
-        }
-    });
-});
 
 router.get('/eventos', (req, res) => {
     const query = 'SELECT * FROM calendarioCivico ORDER BY fecha DESC LIMIT 1';
@@ -43,7 +45,12 @@ router.get('/eventos', (req, res) => {
 router.post('/validar', upload.single('image'), async function (req, res) {
     const datos = req.body;
     const imagenLocal = req.file; // Imagen guardada localmente
-    console.log(imagenLocal.path)
+    const userID = req.session.userID;
+    if (!userID) {
+        return res.status(400).json({ success: false, message: "No se ha autenticado al usuario." });
+    }
+
+    console.log("UID: " + userID);
     if (!imagenLocal) {
         return res.status(400).json({ success: false, message: "Error: No se subió ninguna imagen." });
     }
@@ -70,8 +77,8 @@ router.post('/validar', upload.single('image'), async function (req, res) {
         }
 
         // Guardar los datos en la base de datos
-        let registrar = `INSERT INTO producto (producto, marca, precio, stock, imagen, categoria) 
-                         VALUES ('${nombre}', '${celular}', '${email}', '${mensaje}', '${imagenUrl}', '${categoria}');`;
+        let registrar = `INSERT INTO producto (producto, marca, precio, stock, imagen, categoria, user_id) 
+                         VALUES ('${nombre}', '${celular}', '${email}', '${mensaje}', '${imagenUrl}', '${categoria}', '${userID}');`;
 
         conexion.query(registrar, function (error) {
             if (error) {
@@ -96,14 +103,14 @@ router.post('/actualizar-producto', upload.single('imagen'), async (req, res) =>
     const { id, nombre, precio, stock, marca, categoria, imagenCard, imagenModal, nuevaImagen } = req.body;
     try {
         if (imagenCard !== imagenModal) {
-            console.log("ImagenAntigua: "+imagenCard, "ImagenNueva: "+imagenModal)
+            console.log("ImagenAntigua: " + imagenCard, "ImagenNueva: " + imagenModal)
             // Actualizar la base de datos con el nuevo secureUrl y los datos del producto
             const queryUpdate = `
                 UPDATE producto 
                 SET producto = ?, precio = ?, stock = ?, marca = ?, imagen = ?, categoria = ?
                 WHERE id = ?
             `;
-
+ 
             conexion.query(queryUpdate, [nombre, precio, stock, marca, nuevaImagen, categoria, id], (error) => {
                 if (error) {
                     console.error("Error al actualizar el producto en la base de datos:", error);
@@ -128,13 +135,13 @@ router.post('/actualizar-producto', upload.single('imagen'), async (req, res) =>
                 WHERE id = ?
             `;
 
-            conexion.query(queryUpdate, [nombre, precio, stock, marca,categoria, id], (error) => {
+            conexion.query(queryUpdate, [nombre, precio, stock, marca, categoria, id], (error) => {
                 if (error) {
                     console.error("Error al actualizar el producto en la base de datos:", error);
                     return res.status(500).send("Error al actualizar el producto");
                 }
                 res.json({
-                    imagenNueva:nuevaImagen,
+                    imagenNueva: nuevaImagen,
                     nombre: nombre, // Otros datos que se están actualizando
                     precio: precio,
                     stock: stock,
@@ -211,6 +218,79 @@ router.put('/productos/eliminar', (req, res) => {
     });
 });
 
+
+//SESION
+
+
+
+router.get("/mostrar", function (req, res) {
+    console.log("Sesión activa:", req.session); // Verifica la sesión
+    const userID = req.session.userID; // Obtén el userID de la sesión
+    if (!userID) {
+        return res.redirect("/index.html"); // Si no está autenticado, redirige al login
+    }
+
+    // Consulta SQL para obtener los productos del usuario
+    const consulta = "SELECT * FROM producto WHERE producto_estado = 1 AND user_id = ?";
+    conexion.query(consulta, [userID], function (error, resultados) {
+        if (error) {
+            console.error("Error al obtener datos de la base de datos:", error);
+            res.status(500).send("Error al obtener datos de la base de datos");
+        } else {
+            res.render("mostrar.ejs", { usuarios: resultados });
+        }
+    });
+});
+
+
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Faltan parámetros de email o contraseña' });
+    }
+
+    try {
+        // Intentamos la autenticación con Firebase
+        const userCredentials = await signInWithEmailAndPassword(auth, email, password);
+        const userID = userCredentials.user.uid;
+
+        // Almacena el userID en la sesión
+        req.session.userID = userID;
+
+        res.json({ message: 'Usuario autenticado', userID });
+    } catch (error) {
+        console.log("Error al autenticar al usuario:", error);  // Log del error en el servidor
+        res.status(400).json({ message: 'Error al iniciar sesión', error: error.message });
+    }
+});
+
+router.post("/loginGoogle", async (req, res) => {
+    const { email, uid } = req.body;
+    console.log(uid)
+    if (!email || !uid) {
+        return res.status(400).json({ message: "Faltan datos para autenticar" });
+    }
+
+    try {
+        // Verifica que el UID o email coincidan con un usuario válido
+        const userRecord = await getAuth().getUser(uid);
+
+        if (userRecord.email !== email) {
+            return res.status(401).json({ message: "Usuario no autorizado" });
+        }
+
+        // Establece la sesión
+        req.session.userID = uid;
+        console.log('UID almacenado en la sesión:', req.session.userID);
+
+
+        res.json({ message: "Usuario autenticado", userID: uid });
+    } catch (error) {
+        console.error("Error en la autenticación:", error);
+        res.status(500).json({ message: "Error en la autenticación", error: error.message });
+    }
+});
 module.exports = router;
 
 
