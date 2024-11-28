@@ -23,7 +23,7 @@ googleButton.addEventListener("click", async (e) => {
   
       // Mostrar mensaje de bienvenida
       showMessage("Welcome " + credentials.user.displayName);
-  
+      console.log("UID: ",uid)
       try {
         // Ahora envías el email o el UID
         const response = await fetch('/loginGoogle', {

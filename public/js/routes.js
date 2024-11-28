@@ -4,9 +4,9 @@ const router = express.Router();
 const { cloudinary, upload } = require('./cloudinary');
 const fs = require('fs');
 const { auth, signInWithEmailAndPassword } = require("./firebase/firebaseNode.js");
-const session = require('express-session');
 // Configuración de multer para almacenar archivos temporalmente
 const admin = require('firebase-admin');
+
 
 // Inicializa Firebase Admin con tus credenciales
 if (!admin.apps.length) {
@@ -46,7 +46,11 @@ router.post('/validar', upload.single('image'), async function (req, res) {
     const datos = req.body;
     const imagenLocal = req.file; // Imagen guardada localmente
     const userID = req.session.userID;
+    if (!userID) {
+        return res.status(400).json({ success: false, message: "No se ha autenticado al usuario." });
+    }
 
+    console.log("UID: " + userID);
     if (!imagenLocal) {
         return res.status(400).json({ success: false, message: "Error: No se subió ninguna imagen." });
     }
@@ -73,7 +77,7 @@ router.post('/validar', upload.single('image'), async function (req, res) {
         }
 
         // Guardar los datos en la base de datos
-        let registrar = `INSERT INTO producto (producto, marca, precio, stock, imagen, categoria, usuario_id) 
+        let registrar = `INSERT INTO producto (producto, marca, precio, stock, imagen, categoria, user_id) 
                          VALUES ('${nombre}', '${celular}', '${email}', '${mensaje}', '${imagenUrl}', '${categoria}', '${userID}');`;
 
         conexion.query(registrar, function (error) {
@@ -106,7 +110,7 @@ router.post('/actualizar-producto', upload.single('imagen'), async (req, res) =>
                 SET producto = ?, precio = ?, stock = ?, marca = ?, imagen = ?, categoria = ?
                 WHERE id = ?
             `;
-
+ 
             conexion.query(queryUpdate, [nombre, precio, stock, marca, nuevaImagen, categoria, id], (error) => {
                 if (error) {
                     console.error("Error al actualizar el producto en la base de datos:", error);
@@ -217,31 +221,22 @@ router.put('/productos/eliminar', (req, res) => {
 
 //SESION
 
-router.use(session({
-    secret: 'team_15',  // Cambia esto por algo más seguro
-    resave: false,
-    saveUninitialized: true
-}));
 
 
 router.get("/mostrar", function (req, res) {
     console.log("Sesión activa:", req.session); // Verifica la sesión
     const userID = req.session.userID; // Obtén el userID de la sesión
-    console.log("Usuario autenticado con ID:", userID);
-
     if (!userID) {
         return res.redirect("/index.html"); // Si no está autenticado, redirige al login
     }
 
     // Consulta SQL para obtener los productos del usuario
     const consulta = "SELECT * FROM producto WHERE producto_estado = 1 AND user_id = ?";
-    console.log("Consulta SQL ejecutada:", consulta);
     conexion.query(consulta, [userID], function (error, resultados) {
         if (error) {
             console.error("Error al obtener datos de la base de datos:", error);
             res.status(500).send("Error al obtener datos de la base de datos");
         } else {
-            console.log("Resultados obtenidos:", resultados);
             res.render("mostrar.ejs", { usuarios: resultados });
         }
     });
@@ -272,7 +267,7 @@ router.post('/login', async (req, res) => {
 
 router.post("/loginGoogle", async (req, res) => {
     const { email, uid } = req.body;
-
+    console.log(uid)
     if (!email || !uid) {
         return res.status(400).json({ message: "Faltan datos para autenticar" });
     }
@@ -287,6 +282,8 @@ router.post("/loginGoogle", async (req, res) => {
 
         // Establece la sesión
         req.session.userID = uid;
+        console.log('UID almacenado en la sesión:', req.session.userID);
+
 
         res.json({ message: "Usuario autenticado", userID: uid });
     } catch (error) {
