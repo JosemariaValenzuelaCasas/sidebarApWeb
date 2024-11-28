@@ -3,10 +3,22 @@ const { conexion, connection } = require('./database');
 const router = express.Router();
 const { cloudinary, upload } = require('./cloudinary');
 const fs = require('fs');
-const { auth,signInWithEmailAndPassword } = require("./firebase/firebaseNode.js");
+const { auth, signInWithEmailAndPassword } = require("./firebase/firebaseNode.js");
 const session = require('express-session');
-const { getAuth } = require("firebase-admin/auth");
 // Configuración de multer para almacenar archivos temporalmente
+const admin = require('firebase-admin');
+
+// Inicializa Firebase Admin con tus credenciales
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(require("./firebase/config/configKey.json"))
+  });
+} else {
+  admin.app(); // Usa la app ya existente si está inicializada
+}
+
+// Ahora puedes usar los servicios de Firebase
+const getAuth = admin.auth;
 
 // Ruta para la página principal en "index.html"
 router.get('/', (req, res) => {
@@ -216,25 +228,25 @@ router.get("/mostrar", function (req, res) {
     console.log("Sesión activa:", req.session); // Verifica la sesión
     const userID = req.session.userID; // Obtén el userID de la sesión
     console.log("Usuario autenticado con ID:", userID);
-  
+
     if (!userID) {
-      return res.redirect("/index.html"); // Si no está autenticado, redirige al login
+        return res.redirect("/index.html"); // Si no está autenticado, redirige al login
     }
-  
+
     // Consulta SQL para obtener los productos del usuario
     const consulta = "SELECT * FROM producto WHERE producto_estado = 1 AND user_id = ?";
     console.log("Consulta SQL ejecutada:", consulta);
     conexion.query(consulta, [userID], function (error, resultados) {
-      if (error) {
-        console.error("Error al obtener datos de la base de datos:", error);
-        res.status(500).send("Error al obtener datos de la base de datos");
-      } else {
-        console.log("Resultados obtenidos:", resultados);
-        res.render("mostrar.ejs", { usuarios: resultados });
-      }
+        if (error) {
+            console.error("Error al obtener datos de la base de datos:", error);
+            res.status(500).send("Error al obtener datos de la base de datos");
+        } else {
+            console.log("Resultados obtenidos:", resultados);
+            res.render("mostrar.ejs", { usuarios: resultados });
+        }
     });
-  });
-  
+});
+
 
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
@@ -260,30 +272,30 @@ router.post('/login', async (req, res) => {
 
 router.post("/loginGoogle", async (req, res) => {
     const { email, uid } = req.body;
-  
+
     if (!email || !uid) {
-      return res.status(400).json({ message: "Faltan datos para autenticar" });
+        return res.status(400).json({ message: "Faltan datos para autenticar" });
     }
-  
+
     try {
-      // Verifica que el UID o email coincidan con un usuario válido
-      const userRecord = await getAuth().getUser(uid);
-  
-      if (userRecord.email !== email) {
-        return res.status(401).json({ message: "Usuario no autorizado" });
-      }
-  
-      // Establece la sesión
-      req.session.userID = uid;
-  
-      res.json({ message: "Usuario autenticado", userID: uid });
+        // Verifica que el UID o email coincidan con un usuario válido
+        const userRecord = await getAuth().getUser(uid);
+
+        if (userRecord.email !== email) {
+            return res.status(401).json({ message: "Usuario no autorizado" });
+        }
+
+        // Establece la sesión
+        req.session.userID = uid;
+
+        res.json({ message: "Usuario autenticado", userID: uid });
     } catch (error) {
-      console.error("Error en la autenticación:", error);
-      res.status(500).json({ message: "Error en la autenticación", error: error.message });
+        console.error("Error en la autenticación:", error);
+        res.status(500).json({ message: "Error en la autenticación", error: error.message });
     }
 });
 module.exports = router;
- 
+
 
 
 
