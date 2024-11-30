@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../css/mostrar.css">
-    <link rel="stylesheet" href="../css/modal.css">
+    <link rel="stylesheet" href="../public/css/mostrar.css">
+    <link rel="stylesheet" href="../public/css/modal.css">
 </head>
 
 <body>
@@ -40,13 +40,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="mostrar">
-                            <ion-icon name="file-tray-stacked-outline"></ion-icon>
-                            <span>Productos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/evaCua/formulario/formulario.html">
+                        <a href="soporte">
                             <ion-icon name="settings-outline"></ion-icon>
                             <span>Contacto
                             </span>
@@ -81,8 +75,20 @@
             <div class="menu-bton">
                 <ion-icon id="menu" name="menu-outline"></ion-icon>
             </div>
-            <button onclick="eliminarProductosSeleccionados()"><ion-icon name="trash-outline"></button>
-            <button id="logout">salir</button>
+            <div class="logo">
+                <div class="img-logo">
+                  <img src="../public/image/logo.png" alt="">
+                </div>
+                <span>StockMate</span>
+            </div>
+            <div class="topBton">
+                <div class="eliminar">
+                    <button onclick="eliminarProductosSeleccionados()"><ion-icon name="trash-outline"></button>
+                </div>
+                <div class="cerrarSesion">
+                    <button id="logout">Cerrar Sesion</button>
+                </div>
+            </div>
         </div>
 
         <div class="stadist">

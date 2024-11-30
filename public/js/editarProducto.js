@@ -137,14 +137,18 @@ function eliminarImagen(imagenCard){
     
     const url = imagenCard;
     
-// Extraer el public ID ignorando la versión
-    const publicId = url
-        .split('/image/upload/')[1]  // Quita la parte antes de "image/upload/"
-        .replace(/^v\d+\//, '')      // Elimina el prefijo de versión como "v1732632519/"
-        .replace(/\.[^/.]+$/, '');   // Quita la extensión del archivo (.png, .jpg, etc.)
-
-    console.log(publicId); // Resultado: "productos/bmei4r70t18amzoaupjd"
-
+    if (url && url.includes('/image/upload/')) {
+        const pathAfterUpload = url.split('/image/upload/')[1];  // Esto debería darte "v1732853177/productos/qf50komez5fph5r3sx9d.png"
+        
+        // Eliminamos la versión y la extensión para obtener solo el nombre del archivo
+        const publicId = pathAfterUpload
+          .replace(/^v\d+\//, '')  // Elimina el prefijo de versión, como "v1732853177/"
+          .replace(/\.[^/.]+$/, '');  // Quita la extensión del archivo (.png, .jpg, etc.)
+        
+        console.log(publicId);  // Esto debería imprimir: "productos/qf50komez5fph5r3sx9d"
+      } else {
+        console.error('La URL no tiene el formato esperado.');
+    }
     fetch('/eliminar-imagen', {
         method: 'POST',
         headers: {

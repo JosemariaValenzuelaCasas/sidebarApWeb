@@ -18,9 +18,11 @@
     --color-switch-base: rgb(201, 202, 206);
     --color-switch-circulo: rgb(241, 241, 241);
     --neutral: #d4d4d4;
+    --color-main:rgb(230, 230, 230);
 }
 
 .dark-mode {
+    --color-main:rgb(74, 74, 77);
     --color-barra-lateral: rgb(44, 45, 49);
     --neutral: rgb(71, 70, 78);
     --color-texto: rgb(255, 255, 255);
@@ -128,6 +130,8 @@ html, body {
     background-color: var(--color-boton);
     color: var(--color-boton-texto);
 }
+
+
 .barra-lateral .boton-crear .boton a{
     color: var(--color-boton-texto);
     text-decoration: none; 
@@ -247,7 +251,7 @@ html, body {
     margin-left: 280px;
     min-height: 100vh;
     transition: margin-left 0.5s ease;
-    background-color: var(--color-barra-lateral);
+    background-color: var(--color-main);
 }
 
 .main.min-main {
@@ -257,10 +261,11 @@ html, body {
 /* TOP BAR*/
 .topbar {
     height: 64px;
-    width: 100%;
+    min-width: calc(100% - 280px);
     top: 0;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     background-color: var(--color-barra-lateral);
     padding: 0 16px;
     border-bottom: 1px solid var(--neutral);
@@ -270,15 +275,75 @@ html, body {
 
 .topbar .menu-bton ion-icon {
     font-size: 28px;
+    color: var(--color-texto);
 }
 .topbar button{
     position: relative;
     right: 5px;
+    border: none;
+    background: none;
 }
+
 .topbar button ion-icon{
     
     min-width: 50px;
 }
+
+.logo{
+    display: flex;
+}
+
+.logo span{
+    display: flex;
+    align-items: center;
+    font-size: 25px;
+    color: var(--color-texto);
+}
+
+.logo .img-logo{
+    max-height: 40px;
+    max-width: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.logo .img-logo img{
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.topBton{
+    display: flex;
+    align-items: center;
+    flex-direction:row;
+    gap: 15px;
+}
+
+.topBton .eliminar {
+    background: none;
+}
+.topBton .eliminar ion-icon{
+    min-width: 50px;
+    font-size: 25px;
+    background: none;
+    color: var(--color-texto);
+}
+
+.topbar .cerrarSesion button{
+    font-size: 18px;
+    color: var(--color-boton-texto);
+    background-color: var(--color-boton);
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.5 ease;
+}
+
+.topbar .cerrarSesion button:hover{
+    background-color: rgb(116, 21, 14);
+}
+
 /*MAIN DATOS SUPERIORES*/
 .stadist {
     display: grid;
@@ -302,6 +367,8 @@ html, body {
     transition: transform 0.3s ease-in-out;
     position: relative;
     padding: 5px 0;
+    padding-top: 0;
+    background-color: var(--color-barra-lateral);
 }
 
 .card:hover {
@@ -312,6 +379,7 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
+    top: 0;
     width: 100%;
     height: 138px;
     background-color: #f3f3f3; /* Fondo para imágenes pequeñas */
@@ -331,6 +399,7 @@ html, body {
 
 .product-info h3{
     text-align: center;
+    color:var(--color-texto)
 }
 .product-name {
     font-size: 18px;
@@ -370,6 +439,15 @@ html, body {
     align-items: center;
 }
 
+.botones-producto button{
+    border: none;
+    background-color: var(--color-boton);
+    color: var(--color-boton-texto);
+    font-size: 15px;
+    border-radius: 10px;
+    padding: 5px;
+    cursor: pointer;
+}
 
 .custom_checkbox{
     position: absolute;
@@ -423,6 +501,10 @@ html, body {
 
     .main.min-main{
         margin-left: 0;
+    }
+
+    .topbar{
+        width: 100%;
     }
 
 }

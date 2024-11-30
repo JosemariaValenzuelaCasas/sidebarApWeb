@@ -16,7 +16,13 @@
 
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="/">FireApp</a>
+            <div class="brand">
+                <div class="logo-img">
+                    <img src="./image/logo.png" alt="">
+                </div>
+                <span><a class="navbar-brand" href="/">StockMate</a></span>
+            </div>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -24,10 +30,7 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav ms-auto">
                     <a class="nav-link logged-out" href="#" data-bs-toggle="modal"
-                        data-bs-target="#signinModal">Signin</a>
-                    <a class="nav-link logged-out" href="#" data-bs-toggle="modal"
-                        data-bs-target="#signupModal">Signup</a>
-                    <a class="nav-link logged-in" href="#" id="logout">Logout</a>
+                        data-bs-target="#signinModal">Iniciar Sesión</a>
                 </div>
             </div>
         </div>
@@ -43,38 +46,46 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content bg-dark">
-                <div class="modal-header">
-                    <h3>SignUp</h3>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-5">
-                    <form id="signup-form">
 
-                        <label for="email">Email:</label>
-                        <input type="text" id="signup-email" class="form-control mb-3" placeholder="Title" required>
+    <h2>BIENVENIDOS A STOCKMATE</h2>
+    <div class="team">
+        <h3>By ByteCrafters</h3>
+        <div class="img-team">
+            <img src="./image/team.png" alt="">
+        </div>
+    </div>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card bg-dark text-white">
+                    <div class="card-header">
+                        <h3 class="text-center">Registrate</h3>
+                    </div>
+                    <div class="card-body p-5">
+                        <form id="signup-form">
 
-                        <label for="password">Password:</label>
-                        <input type="password" id="signup-password" class="form-control mb-3" placeholder="Password"
-                            required>
+                            <label for="email">Email:</label>
+                            <input type="text" id="signup-email" class="form-control mb-3" placeholder="Email" required>
 
-                        <button type="submit" class="btn btn-primary">Registrarse</button>
-                    </form>
+                            <label for="password">Password:</label>
+                            <input type="password" id="signup-password" class="form-control mb-3" placeholder="Password"
+                                required>
+
+                            <button type="submit" class="btn btn-primary">Registrarse</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 
     <div class="modal fade" id="signinModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalSignin"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3>SignIn</h3>
+                    <h3>Iniciar Sesion</h3>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -82,7 +93,7 @@
                     <form id="login-form">
                         <label for="email">Email</label>
                         <input type="text" id="login-email" class="form-control mb-3" placeholder="Title" required>
-                        
+
                         <label for="password">Password:</label>
                         <input type="password" id="login-password" class="form-control mb-3" placeholder="Password"
                             required>

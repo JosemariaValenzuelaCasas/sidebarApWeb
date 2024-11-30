@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto</title>
+    <link rel="stylesheet" href="../public/css/mostrar.css">
+    <link rel="stylesheet" href="../public/css/soporte.css">
+    <link rel="stylesheet" href="../public/css/faq.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+
+<body>
+    <div class="barra-lateral">
+        <div class="nombre-pagina">
+            <ion-icon id="cloud" name="cloud-outline"></ion-icon>
+            <span>chocoflow</span>
+        </div>
+
+        <div class="boton-crear">
+            <button class="boton">
+                <ion-icon name="add-outline"></ion-icon>
+                <a href="formulario"><span>Añadir producto</span></a>
+            </button>
+        </div>
+
+        <div class="navegacion-side">
+            <nav class="navegacion">
+                <ul>
+                    <li>
+                        <a href="/formulario">
+                            <ion-icon name="home-outline"></ion-icon>
+                            <span>Inicio</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/mostrar">
+                            <ion-icon name="file-tray-stacked-outline"></ion-icon>
+                            <span>Productos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/soporte">
+                            <ion-icon name="settings-outline"></ion-icon>
+                            <span>Contacto
+                            </span>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+        </div>
+
+
+        <div class="linea"></div>
+
+        <div id="modo-oscuro" class="modo-oscuro">
+            <div class="info">
+                <ion-icon name="moon-outline"></ion-icon>
+                <span>Modo oscuro</span>
+            </div>
+            <div class="switch">
+                <div class="base">
+                    <div class="circulo">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="main">
+        <div class="topbar">
+            <div class="menu-bton">
+                <ion-icon id="menu" name="menu-outline"></ion-icon>
+            </div>
+            <div class="logo">
+                <div class="img-logo">
+                  <img src="../public/image/logo.png" alt="">
+                </div>
+                <span>StockMate</span>
+            </div>
+            <div class="topBton">
+                <div class="eliminar">
+                    <button onclick="eliminarProductosSeleccionados()"><ion-icon name="trash-outline"></button>
+                </div>
+                <div class="cerrarSesion">
+                    <button id="logout">Cerrar Sesion</button>
+                </div>
+            </div>
+        </div>
+        <div class="formulario-cont">
+            <form id="myForm">
+                <div class="formulario">
+                    <h2>Contacto</h2>
+                    <div class="input-group">
+                        <label for="name">Nombre</label>
+                        <input type="text" name="name" id="name" placeholder="Nombre">
+    
+                        <label for="phone">Telefono</label>
+                        <input type="tel" name="phone" id="phone" placeholder="Telefono">
+    
+                        <label for="email">Email</label>
+                        <input type="text" name="email" id="email" placeholder="Email">
+    
+                        <label for="message">Mensaje</label>
+                        <textarea name="message" id="message" cols="30" rows="10" placeholder="Mensaje"></textarea>
+    
+                        <input class="btn" type="submit" value="Enviar">
+                    </div>
+                </div>
+            </form>
+            <div id="response-message" style="margin-top: 10px; color: #2575fc; font-weight: bold;"></div>
+        </div>
+        <div class="header-faq">
+            <div class="texto-1">
+                <h1>¡Contáctate con Nosotros!</h1>
+                <p>¡Estamos aquí para ayudar! Con solo un poco de información podremos responder tu consulta.</p>
+            </div>
+        </div>
+        <section class="faq-container">
+            <h1>Preguntas Frecuentes</h1>
+            <% preguntasTop.forEach(pregunta=> { %>
+                <div class="faq-card" onclick="toggleAnswer(this)">
+                    <div class="faq-question">
+                        <%= pregunta.mainPregunta %>
+                    </div>
+                    <div class="faq-answer">
+                        <%= pregunta.respuesta %>
+                    </div>
+                </div>
+                <% }) %>
+        </section>
+
+    </div>
+
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="../js/soporte.js"></script>
+    <script src="../js/faq.js"></script>
+    <script src="../js/firebase/logOut.mjs" type="module"></script>
+    <script src="../js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</body>
+
+</html>

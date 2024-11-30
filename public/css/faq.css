@@ -1,0 +1,50 @@
+.faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.texto-1 h1 {
+    font-size: 36px; /* Tamaño de fuente grande para encabezados */
+    margin-bottom: 10px; /* Espaciado inferior */
+}
+
+.texto-1 p {
+    font-size: 18px; /* Fuente legible para párrafos */
+    line-height: 1.5; /* Aumenta la altura de línea para mejor lectura */
+}
+
+/* FAQ Card */
+.faq-card {
+    background: #fff;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    overflow: hidden;
+    color: #333;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 15px;
+}
+
+.faq-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* FAQ Question */
+.faq-question {
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+/* FAQ Answer */
+.faq-answer {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.5;
+    display: none;
+    /* Hidden by default */
+    margin-top: 10px;
+}

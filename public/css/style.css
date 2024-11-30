@@ -1,95 +1,173 @@
-.formulario{
+.formulario {
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-top: 80px;
+    
 }
 
-.topbar{
+.topbar {
     position: relative;
-    justify-content: center;
+    justify-content: space-between;
 }
 
-.topbar .menu-bton{
-    position: absolute;
+.topbar .menu-bton {
     left: 0;
 }
-.topbar .calendar{
+
+.topbar .calendar {
     display: flex;
     justify-content: flex-start;
 }
-form {
-    margin-top: 20px;
-    padding: 25px 55px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    border-radius: 20px;
+
+.form-container {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 700px;
     text-align: center;
-    width: 340px;
     background-color: var(--color-barra-lateral);
 }
 
-.input-group {
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-sections {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    /* Permite que las secciones se apilen en pantallas pequeñas */
+}
+
+.form-left,
+.form-right {
+    width: 48%;
+}
+
+.form-left {
+    padding-right: 50px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
     text-align: left;
 }
 
-h2 {
-    color: #283629;
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 15px;
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
 }
 
-input,
-textarea {
-    padding: 17px 25px;
-    border-radius: 25px;
-    margin-bottom: 20px;
-    background-color: #fff7ed;
-    border: 2px solid #faf4f0;
-    color: #283629;
-    outline: none;
+input[type="file"] {
+    display: none;
+    /* Ocultar el input de archivo por defecto */
 }
 
-input::placeholder,
-textarea::placeholder {
-    color: #cac0b5;
-
-}
-
-
-
-.btn {
-    font-size: 16px;
-    color: #FFFFFF;
-    border: 0;
-    border-radius: 25px;
-    background-color: #d9684c;
-    box-shadow: 0 0 20px rgba(254, 80, 0, 0.4);
+.file-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--color-boton);
+    color: var(--color-boton-texto);
+    border-radius: 4px;
     cursor: pointer;
+    margin: 10px 0;
 }
 
-.btn::hover {
-    background-color: #e09f4b;
+.file-label:hover {
+    background-color: rgb(116, 21, 14);
 }
 
-.textito{
-    font-size: 40px;
+form button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: var(--color-boton);
+    color: var(--color-boton-texto);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
 }
 
-@media(max-width:991px) {
-    body {
-        padding: 30px;
-    }
+button:hover {
+    background-color: rgb(116, 21, 14);
+}
 
-    form {
-        padding: 50px 30px;
+.preview-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 270px;
+    max-height: 350px;
+    max-width: 300px;
+    background-color: #f3f3f3;
+    /* Fondo para imágenes pequeñas */
+    border-radius: 8px;
+
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+#imagePreview {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+/* Media Queries para pantallas pequeñas */
+@media (max-width: 768px) {
+    .form-container {
         width: 100%;
+        padding: 20px;
     }
 
-    input {
-        padding: 15px;
-
+    .form-sections {
+        flex-direction: column;
+        flex-wrap: wrap;
     }
 
+    .form-left,
+    .form-right {
+        width: 100%;
+        padding-right: 0;
+    }
+
+    .form-left {
+        margin-bottom: 20px;
+    }
+
+    .preview-container {
+        max-width: 100%;
+        height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 18px;
+    }
+
+    input,
+    button {
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    .file-label {
+        padding: 12px 24px;
+        font-size: 16px;
+    }
+
+    .preview-container {
+        height: 180px;
+    }
 }

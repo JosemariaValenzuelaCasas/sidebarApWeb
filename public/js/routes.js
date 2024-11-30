@@ -1,5 +1,5 @@
 const express = require('express');
-const { conexion, connection } = require('./database');
+const { conexion, connection,con } = require('./database');
 const router = express.Router();
 const { cloudinary, upload } = require('./cloudinary');
 const fs = require('fs');
@@ -44,8 +44,11 @@ router.get('/eventos', (req, res) => {
 
 router.post('/validar', upload.single('image'), async function (req, res) {
     const datos = req.body;
+    console.log(datos)
+    console.log(req.file)
     const imagenLocal = req.file; // Imagen guardada localmente
     const userID = req.session.userID;
+    console.log("UID: " + userID);
     if (!userID) {
         return res.status(400).json({ success: false, message: "No se ha autenticado al usuario." });
     }
@@ -87,6 +90,7 @@ router.post('/validar', upload.single('image'), async function (req, res) {
 
             res.json({ success: true, message: "Producto registrado correctamente." });
         });
+        console.log("klk")
     } catch (error) {
         console.error("Error al subir a Cloudinary:", error);
 
@@ -291,6 +295,70 @@ router.post("/loginGoogle", async (req, res) => {
         res.status(500).json({ message: "Error en la autenticación", error: error.message });
     }
 });
+
+router.get('/logout', (req, res) => {
+    // Elimina la sesión y redirige al login o página principal
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).send("Error al cerrar sesión.");
+        }
+        res.redirect('/index');
+    });
+});
+
+
+//soporte
+router.get("/soporte", function (req, res) {
+    const consulta = `
+        SELECT mainPregunta, respuesta
+        FROM preguntaUsuario
+        WHERE estado_pregunta = 'activa' AND mainPregunta != 'Sin consolidar'
+        GROUP BY mainPregunta, respuesta
+        ORDER BY COUNT(*) DESC
+        LIMIT 5;
+    `;
+
+    con.query(consulta, function (error, resultados) {
+        if (error) {
+            res.status(500).send("Error al obtener datos de la base de datos");
+        } else {
+            res.render("soporte", { preguntasTop: resultados });
+        }
+    });
+});
+
+router.post('/validarSupport', async function (req, res) {
+    const datos = req.body;
+    console.log(datos)
+    // Imagen guardada localmente
+    let nombre = datos.name;
+    let celular = datos.phone;
+    let email = datos.email;
+    let mensaje = datos.message;
+    let main = "Sin consolidar";
+    let respuesta ="Pendiente de respuesta";
+    console.log("klk")
+    try {
+
+        // Guardar los datos en la base de datos
+        let registrar = `INSERT INTO preguntaUsuario (nombre, celular, email, pregunta, mainPregunta, respuesta) 
+                         VALUES ('${nombre}', '${celular}', '${email}', '${mensaje}', '${main}', '${respuesta}');`;
+
+        con.query(registrar, function (error) {
+            if (error) {
+                return res.status(500).json({ success: false, message: "Error al registrar el producto." });
+            }
+
+            res.json({ success: true, message: "Pregunta registrada correctamente." });
+        })
+        console.log("xddd")
+    } catch (error) {
+        console.error("Error ", error);
+
+        res.status(500).json({ success: false, message: "Error p." });
+    }
+});
+
 module.exports = router;
 
 

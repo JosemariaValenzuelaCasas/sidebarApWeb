@@ -5,8 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>sidebar</title>
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/mostrar.css">
+  <link rel="stylesheet" href="../public/css/style.css">
+  <link rel="stylesheet" href="../public/css/mostrar.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body>
@@ -18,7 +19,7 @@
 
     <div class="boton-crear">
       <button class="boton">
-        <ion-icon name="add-outline"></ion-icon>
+        <a href="formulario"><ion-icon name="add-outline"></ion-icon></a>
         <a href="formulario"><span>Añadir producto</span></a>
       </button>
     </div>
@@ -30,12 +31,6 @@
             <a href="formulario">
               <ion-icon name="home-outline"></ion-icon>
               <span>Inicio</span>
-            </a>
-          </li>
-          <li>
-            <a href="mostrar">
-              <ion-icon name="file-tray-stacked-outline"></ion-icon>
-              <span>Productos</span>
             </a>
           </li>
           <li>
@@ -80,39 +75,54 @@
       <div class="menu-bton">
         <ion-icon id="menu" name="menu-outline"></ion-icon>
       </div>
-      <div class="calendar">
-        <div class="day-title" id="dayTitle"></div>
-        <div class="date" id="date"></div>
+      <div class="logo">
+        <div class="img-logo">
+          <img src="../public/image/logo.png" alt="">
+        </div>
+        <span>StockMate</span>
+      </div>
+      <div class="cerrarSesion">
+        <button id="logout">Cerrar Sesion</button>
       </div>
     </div>
 
     <div class="formulario">
-      <form method="post" id="myForm" enctype="multipart/form-data">
-        <h2>Producto</h2>
-  
-        <div class="input-group">
-          <label for="name">Nombre</label>
-          <input type="text" name="name" id="name" placeholder="Nombre del producto">
-  
-          <label for="phone">Marca</label>
-          <input type="tel" name="phone" id="phone" placeholder="Marca del procuto">
-  
-          <label for="email">Precio</label>
-          <input type="text" name="email" id="email" placeholder="Precio del producto">
-          
-          <label for="email">Categoria</label>
-          <input type="text" name="categoria" id="categoria" placeholder="Categoria del producto">
+      <div class="form-container">
+        <h2>Formulario de Producto</h2>
+        <form method="post" id="myForm" enctype="multipart/form-data">
+          <div class="form-sections">
+            <!-- Sección de Datos -->
+            <div class="form-left">
+              <label for="name">Nombre del Producto</label>
+              <input type="text" name="name" id="name" placeholder="Nombre del producto">
 
-          <label for="message">Stock</label>
-          <input name="message" id="message" placeholder="Stock">
-          <label for="image">Inserta imagen</label>
-          <input type="file" id="image" name="image" accept="image/*" required />
-          <input class="btn" type="submit" value="Enviar">
-          
-          <script src="#"></script>
-        </div>
-  
-      </form>
+              <label for="brand">Marca</label>
+              <input type="tel" name="phone" id="phone" placeholder="Marca del procuto">
+
+              <label for="price">Precio</label>
+              <input type="text" name="email" id="email" placeholder="Precio del producto">
+
+              <label for="category">Categoría</label>
+              <input type="text" name="categoria" id="categoria" placeholder="Categoria del producto">
+
+              <label for="stock">Stock</label>
+              <input name="message" id="message" placeholder="Stock">
+            </div>
+
+            <!-- Sección de Imagen -->
+            <div class="form-right">
+              <label for="image" class="file-label">Seleccionar Imagen</label>
+              <input type="file" id="image" name="image" accept="image/*" required>
+
+              <div class="preview-container">
+                <img id="imagePreview" src="" alt="Vista previa" style="display: none;">
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" value="Enviar">Enviar</button>
+        </form>
+      </div>
       <div id="response-message"></div>
     </div>
   </div>
@@ -123,6 +133,9 @@
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <script src="../js/script.js"></script>
   <script src="../js/formulario.js"></script>
+  <script src="../js/imagenForm.js"></script>
+  <script src="../js/firebase/logOut.mjs" type="module"></script>
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 
 </html>

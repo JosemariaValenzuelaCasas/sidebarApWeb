@@ -14,9 +14,9 @@ signUpForm.addEventListener("submit", async (e) => {
     console.log(userCredential)
 
     
-    const signupModal = document.querySelector('#signupModal');
+    /*const signupModal = document.querySelector('#signupModal');
     const modal = bootstrap.Modal.getInstance(signupModal);
-    modal.hide();
+    modal.hide();*/
 
     signUpForm.reset();
 
